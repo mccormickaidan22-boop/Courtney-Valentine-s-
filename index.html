@@ -122,44 +122,48 @@
     </div>
   </div>
 
-  <script>
-    let noClicks = 0;
-    const noTexts = [
-      "Are you sure",
-      "Are you REALLY sure",
-      "Think carefully…",
-      "Last chance…",
-      "Really?",
-      "Come on…",
-      "Don't break my heart…",
-      "Okay now you're just being silly"
-    ];
+<script>
+  let noClicks = 0;
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
 
-    function sayYes() {
-      const msg = document.getElementById("message");
-      msg.classList.add("show");
+  const noTexts = [
+    "Are you sure",
+    "Are you REALLY sure",
+    "Think carefully…",
+    "Last chance…",
+    "Really?",
+    "Come on…",
+    "Don't break my heart…",
+    "Okay now you're just being silly"
+  ];
+
+  function sayYes() {
+    const msg = document.getElementById("message");
+    msg.classList.add("show");
+  }
+
+  function sayNo() {
+    // Change the No button text
+    if (noClicks < noTexts.length) {
+      noBtn.textContent = noTexts[noClicks];
+    } else {
+      // Make the No button run away
+      const x = Math.random() * 300 - 150;
+      const y = Math.random() * 300 - 150;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    function sayNo() {
-      const noBtn = document.getElementById("noBtn");
-      const yesBtn = document.getElementById("yesBtn");
+    // Make the Yes button grow — eventually filling the whole screen
+    const scale = 1 + noClicks * 0.4;  // Increase growth rate
+    yesBtn.style.transform = `scale(${scale})`;
 
-      // Change text
-      if (noClicks < noTexts.length) {
-        noBtn.textContent = noTexts[noClicks];
-      } else {
-        // Make the No button run away
-        const x = Math.random() * 200 - 100;
-        const y = Math.random() * 200 - 100;
-        noBtn.style.transform = `translate(${x}px, ${y}px)`;
-      }
-
-      // Grow the Yes button
-      const scale = 1 + noClicks * 0.15;
-      yesBtn.style.transform = `scale(${scale})`;
-
-      noClicks++;
+    // Once it gets huge, hide the No button entirely
+    if (scale > 8) {
+      noBtn.style.display = "none";
     }
-  </script>
-</body>
+
+    noClicks++;
+  }
+</script>
 </html>
