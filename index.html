@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Will You Be My Valentine Coco?</title>
+  <title>Will You Be My Valentine, Coco?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -15,6 +15,37 @@
       align-items: center;
       justify-content: center;
       color: #fff;
+      overflow: hidden;
+    }
+
+    .floating-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      bottom: -50px;
+      animation-name: floatUp;
+      animation-timing-function: linear;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .card {
@@ -26,6 +57,7 @@
       backdrop-filter: blur(8px);
       max-width: 400px;
       position: relative;
+      z-index: 2;
     }
 
     h1 {
@@ -63,7 +95,7 @@
       padding: 10px 22px;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
 
     .yes {
@@ -71,18 +103,14 @@
       color: #ff4b6e;
       font-weight: bold;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 3;
     }
 
     .no {
       background: #ffebf0;
       color: #c2185b;
       font-weight: bold;
-      position: relative;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      z-index: 3;
     }
 
     .message {
@@ -106,6 +134,9 @@
   </style>
 </head>
 <body>
+
+  <div class="floating-container"></div>
+
   <div class="card">
     <div class="heart">❤️</div>
     <h1>Will you be my Valentine?</h1>
@@ -117,57 +148,78 @@
     </div>
 
     <div id="message" class="message">
-      Yay! You just made me the happiest person. 💕
-      <div class="signature">Love, Your Husband</div>
+      Love you babygirl💕
+      <div class="signature">-Your Husband</div>
     </div>
   </div>
 
-<script>
-  let noClicks = 0;
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
+  <script>
+    // Floating hearts + flowers
+    function createFloatingEmoji() {
+      const container = document.querySelector('.floating-container');
+      const emoji = document.createElement('div');
 
-  const noTexts = [
-    "Are you sure",
-    "Are you REALLY sure",
-    "Think carefully…",
-    "Last chance…",
-    "Really?"
-  ];
+      const options = ["❤️", "💗", "💖", "💘", "🌸", "🌺", "🌷", "💐"];
+      emoji.textContent = options[Math.floor(Math.random() * options.length)];
 
-  function sayYes() {
-    const msg = document.getElementById("message");
-    msg.classList.add("show");
-  }
+      emoji.classList.add('floating-emoji');
+      emoji.style.left = Math.random() * 100 + "vw";
 
-  function sayNo() {
-    noClicks++;
+      const size = Math.random() * 30 + 20;
+      emoji.style.fontSize = size + "px";
 
-    // Change text for the first 5 clicks
-    if (noClicks <= noTexts.length) {
-      noBtn.textContent = noTexts[noClicks - 1];
+      emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+
+      container.appendChild(emoji);
+
+      setTimeout(() => emoji.remove(), 10000);
     }
 
-    // After 5 clicks: remove No button and expand Yes button
-    if (noClicks === 5) {
-      noBtn.style.display = "none";
+    setInterval(createFloatingEmoji, 400);
 
-      // Make the Yes button fill the entire screen
-      yesBtn.style.position = "fixed";
-      yesBtn.style.top = "0";
-      yesBtn.style.left = "0";
-      yesBtn.style.width = "100vw";
-      yesBtn.style.height = "100vh";
-      yesBtn.style.borderRadius = "0";
-      yesBtn.style.fontSize = "3rem";
-      yesBtn.style.zIndex = "999";
-      yesBtn.style.transform = "none";
-    } else {
-      // Before that, grow the Yes button gradually
-      const scale = 1 + noClicks * 0.4;
-      yesBtn.style.transform = `scale(${scale})`;
+    // Button logic
+    let noClicks = 0;
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+
+    const noTexts = [
+      "Are you sure",
+      "Are you REALLY sure",
+      "Think carefully…",
+      "Last chance…",
+      "Really?"
+    ];
+
+    function sayYes() {
+      const msg = document.getElementById("message");
+      msg.classList.add("show");
     }
-  }
-</script>
+
+    function sayNo() {
+      noClicks++;
+
+      if (noClicks <= noTexts.length) {
+        noBtn.textContent = noTexts[noClicks - 1];
+      }
+
+      if (noClicks === 5) {
+        noBtn.style.display = "none";
+
+        yesBtn.style.position = "fixed";
+        yesBtn.style.top = "0";
+        yesBtn.style.left = "0";
+        yesBtn.style.width = "100vw";
+        yesBtn.style.height = "100vh";
+        yesBtn.style.borderRadius = "0";
+        yesBtn.style.fontSize = "3rem";
+        yesBtn.style.zIndex = "999";
+        yesBtn.style.transform = "none";
+      } else {
+        const scale = 1 + noClicks * 0.4;
+        yesBtn.style.transform = `scale(${scale})`;
+      }
+    }
+  </script>
+
 </body>
 </html>
