@@ -142,13 +142,13 @@
     <h1>Will you be my Valentine?</h1>
     <p>I can’t imagine this day without you.<br />So I had to ask you properly.</p>
 
-    <div class="buttons">
+    <div class="buttons" id="buttonContainer">
       <button class="yes" id="yesBtn" onclick="sayYes()">Yes</button>
       <button class="no" id="noBtn" onclick="sayNo()">No</button>
     </div>
 
     <div id="message" class="message">
-      Love you babygirl💕
+      Love you babygirl
       <div class="signature">-Your Husband</div>
     </div>
   </div>
@@ -181,6 +181,7 @@
     let noClicks = 0;
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
+    const buttonContainer = document.getElementById("buttonContainer");
 
     const noTexts = [
       "Are you sure",
@@ -190,7 +191,12 @@
       "Really?"
     ];
 
+    function hideButtons() {
+      buttonContainer.style.display = "none";
+    }
+
     function sayYes() {
+      hideButtons();
       const msg = document.getElementById("message");
       msg.classList.add("show");
     }
@@ -203,7 +209,7 @@
       }
 
       if (noClicks === 5) {
-        noBtn.style.display = "none";
+        hideButtons();
 
         yesBtn.style.position = "fixed";
         yesBtn.style.top = "0";
@@ -214,6 +220,7 @@
         yesBtn.style.fontSize = "3rem";
         yesBtn.style.zIndex = "999";
         yesBtn.style.transform = "none";
+
       } else {
         const scale = 1 + noClicks * 0.4;
         yesBtn.style.transform = `scale(${scale})`;
