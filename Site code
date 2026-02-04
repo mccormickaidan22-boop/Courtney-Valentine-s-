@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Will You Be My Valentine?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at top, #ffb6c1, #ff4b6e);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      max-width: 400px;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 25px;
+    }
+
+    .heart {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .yes {
+      background: #ffffff;
+      color: #ff4b6e;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .no {
+      background: #ffebf0;
+      color: #c2185b;
+      font-weight: bold;
+      position: relative;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .signature {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="heart">❤️</div>
+    <h1>Will you be my Valentine?</h1>
+    <p>I can’t imagine this day without you.<br />So I had to ask you properly.</p>
+
+    <div class="buttons">
+      <button class="yes" id="yesBtn" onclick="sayYes()">Yes</button>
+      <button class="no" id="noBtn" onclick="sayNo()">No</button>
+    </div>
+
+    <div id="message" class="message">
+      Yay! You just made me the happiest person. 💕
+      <div class="signature">Love, [Your Name]</div>
+    </div>
+  </div>
+
+  <script>
+    let noClicks = 0;
+    const noTexts = [
+      "Are you sure",
+      "Are you REALLY sure",
+      "Think carefully…",
+      "Last chance…",
+      "Really?",
+      "Come on…",
+      "Don't break my heart…",
+      "Okay now you're just being silly"
+    ];
+
+    function sayYes() {
+      const msg = document.getElementById("message");
+      msg.classList.add("show");
+    }
+
+    function sayNo() {
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
+
+      // Change text
+      if (noClicks < noTexts.length) {
+        noBtn.textContent = noTexts[noClicks];
+      } else {
+        // Make the No button run away
+        const x = Math.random() * 200 - 100;
+        const y = Math.random() * 200 - 100;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      // Grow the Yes button
+      const scale = 1 + noClicks * 0.15;
+      yesBtn.style.transform = `scale(${scale})`;
+
+      noClicks++;
+    }
+  </script>
+</body>
+</html>
